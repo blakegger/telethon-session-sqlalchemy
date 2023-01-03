@@ -44,8 +44,9 @@ class AlchemySessionContainer:
             if not self.db:
                 raise ValueError("Can't manage tables without an ORM session.")
             table_base.metadata.bind = self.db_engine
-            if not self.db_engine.dialect.has_table(self.db_engine,
-                                                    self.Version.__tablename__):
+            #if not self.db_engine.dialect.has_table(self.db_engine,
+            #                                        self.Version.__tablename__):
+            if not sql.inspect(self.db_engine).has_table(self.Version.__tablename__):
                 table_base.metadata.create_all()
                 self.db.add(self.Version(version=LATEST_VERSION))
                 self.db.commit()
@@ -121,7 +122,8 @@ class AlchemySessionContainer:
             __tablename__ = '{prefix}sent_files'.format(prefix=prefix)
 
             session_id = Column(String(255), primary_key=True)
-            md5_digest = Column(LargeBinary, primary_key=True)
+            #md5_digest = Column(LargeBinary, primary_key=True)
+            md5_digest = Column(String(65535), primary_key=True)
             file_size = Column(Integer, primary_key=True)
             type = Column(Integer, primary_key=True)
             id = Column(BigInteger)
