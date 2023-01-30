@@ -24,7 +24,7 @@ class AlchemySessionContainer:
 
         self.db_engine = engine
         if session is None:
-            db_factory = orm.sessionmaker(bind=self.db_engine)
+            db_factory = orm.sessionmaker(bind=self.db_engine, autoflush=True)
             self.db = orm.scoping.scoped_session(db_factory)
         elif not session:
             self.db = None
